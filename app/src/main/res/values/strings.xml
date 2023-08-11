@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">eCommerce</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="sign_in">Sign In</string>
+    <string name="login">Login</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="enter_username">Enter username</string>
+    <string name="version_prefix">v</string>
+    <string name="enter_valid_email_id">Enter valid email id</string>
+    <string name="password_can_not_exceed_8_characters">Password can not exceed 8 characters</string>
+    <string name="create_account">Create Account</string>
+    <string name="let_s_get_started">Let\'s get started</string>
+    <string name="continue_with_login">Continue with login</string>
+    <string name="remember_me">Remember me</string>
+    <string name="forget_password">Forget Password?</string>
 </resources>
