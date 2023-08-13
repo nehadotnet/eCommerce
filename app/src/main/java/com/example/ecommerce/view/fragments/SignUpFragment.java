@@ -31,7 +31,8 @@ public class SignUpFragment extends Fragment {
         txtUserName = view.findViewById(R.id.txt_username);
         txtEmail = view.findViewById(R.id.txt_email);
         txtPassword = view.findViewById(R.id.txt_password);
-        //setUI();
+        btnSignUp = view.findViewById(R.id.btn_signup);
+        setUI();
     }
 
     private void setUI() {

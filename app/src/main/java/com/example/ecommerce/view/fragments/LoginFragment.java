@@ -32,8 +32,9 @@ public class LoginFragment extends Fragment {
     private void initUI(View view) {
         txtEmail = view.findViewById(R.id.txt_email);
         txtPassword = view.findViewById(R.id.txt_password);
+        btnLogin = view.findViewById(R.id.btn_login);
 
-        //setUI();
+        setUI();
     }
 
     private void setUI() {
