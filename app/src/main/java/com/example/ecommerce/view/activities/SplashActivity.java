@@ -1,7 +1,12 @@
 package com.example.ecommerce.view.activities;
 
+import static com.example.ecommerce.utils.Constants.PREF_EMAIL;
+import static com.example.ecommerce.utils.Constants.PREF_NAME;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.TextView;
@@ -13,6 +18,7 @@ import com.example.ecommerce.utils.Utils;
 
 public class SplashActivity extends AppCompatActivity {
     TextView tvVersion;
+    Intent nextScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +32,17 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Utils.navigateScreen(SplashActivity.this, AuthActivity.class);
-                finishAffinity();
+                SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREF_FILENAME, MODE_PRIVATE);
+                String userId = sharedPreferences.getString(Constants.PREF_USER_ID, "");
+                String email = sharedPreferences.getString(PREF_EMAIL, "");
+                if (userId.length() > 0 && email.length() > 0) {
+                    Utils.navigateScreen(SplashActivity.this, DashBoardActivity.class);
+                    finishAffinity();
+                } else {
+                    Utils.navigateScreen(SplashActivity.this, AuthActivity.class);
+                    finishAffinity();
+                }
             }
         }, Constants.HANDLER_DELAY);
-
     }
 }

@@ -18,6 +18,7 @@ import com.example.ecommerce.contract.AuthContractImpl;
 import com.example.ecommerce.models.UserModel;
 import com.example.ecommerce.utils.Utils;
 import com.github.ybq.android.spinkit.SpinKitView;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SignUpFragment extends Fragment implements AuthContract.View {
     TextView txtUserName, txtEmail, txtPassword;
@@ -40,7 +41,7 @@ public class SignUpFragment extends Fragment implements AuthContract.View {
         txtEmail = view.findViewById(R.id.txt_email);
         txtPassword = view.findViewById(R.id.txt_password);
         btnSignUp = view.findViewById(R.id.btn_signup);
-        spinKitView=view.findViewById(R.id.spin_kit);
+        spinKitView = view.findViewById(R.id.spin_kit);
         authContract = new AuthContractImpl(this);
         setUI();
     }
@@ -91,23 +92,31 @@ public class SignUpFragment extends Fragment implements AuthContract.View {
         if (!isUserDetailSaved) {
             authContract.saveUserDetails(userModel);
         } else {
-            Utils.showMessage(getContext(),getString(R.string.user_registered_successfully));
+            Utils.showMessage(getContext(), getString(R.string.user_registered_successfully));
+            showNotification();
         }
+    }
+
+    private void showNotification() {
     }
 
     @Override
     public void onFailure(String message) {
-        Utils.showMessage(getContext(),message);
+        Utils.showMessage(getContext(), message);
     }
 
     @Override
     public void showProgress() {
-       Utils.showLoadingIndicator(spinKitView);
-       // spinKitView.setVisibility(View.VISIBLE);
+        Utils.showLoadingIndicator(spinKitView);
     }
+
     @Override
     public void hideProgress() {
-       Utils.hideLoadingIndicator(spinKitView);
-        //spinKitView.setVisibility(View.GONE);
+        Utils.hideLoadingIndicator(spinKitView);
+    }
+
+    @Override
+    public void onLoginSuccess(FirebaseUser firebaseUser) {
+
     }
 }

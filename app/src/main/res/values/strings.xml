@@ -18,4 +18,5 @@
     <string name="remember_me">Remember me</string>
     <string name="forget_password">Forget Password?</string>
     <string name="user_registered_successfully">User registered successfully</string>
+    <string name="login_successfully">Login Successfully</string>
 </resources>

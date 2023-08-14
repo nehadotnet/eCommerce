@@ -1,8 +1,12 @@
 package com.example.ecommerce.view.fragments;
 
-import static com.example.ecommerce.utils.Utils.isValidEmail;
-import static com.example.ecommerce.utils.Utils.showMessage;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.example.ecommerce.utils.Constants.PREF_FILENAME;
+import static com.example.ecommerce.utils.Utils.isValidEmail;
+
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.AppCompatButton;
@@ -16,11 +20,17 @@ import com.example.ecommerce.R;
 import com.example.ecommerce.contract.AuthContract;
 import com.example.ecommerce.contract.AuthContractImpl;
 import com.example.ecommerce.models.UserModel;
+import com.example.ecommerce.utils.Constants;
 import com.example.ecommerce.utils.Utils;
+import com.example.ecommerce.view.activities.DashBoardActivity;
+import com.example.ecommerce.view.activities.SplashActivity;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Objects;
 
 
-public class LoginFragment extends Fragment implements AuthContract.View{
+public class LoginFragment extends Fragment implements AuthContract.View {
 
     TextInputEditText txtEmail, txtPassword;
     AppCompatButton btnLogin;
@@ -39,7 +49,7 @@ public class LoginFragment extends Fragment implements AuthContract.View{
         txtEmail = view.findViewById(R.id.txt_email);
         txtPassword = view.findViewById(R.id.txt_password);
         btnLogin = view.findViewById(R.id.btn_login);
-        authContract=new AuthContractImpl(this);
+        authContract = new AuthContractImpl(this);
 
         setUI();
     }
@@ -50,8 +60,8 @@ public class LoginFragment extends Fragment implements AuthContract.View{
             public void onClick(View v) {
                 String email = txtEmail.getText().toString();
                 String password = txtPassword.getText().toString();
-                if (checkValidation(email,password)) {
-                    authContract.doLogin(email,password);
+                if (checkValidation(email, password)) {
+                    authContract.doLogin(email, password);
                 }
             }
         });
@@ -82,14 +92,19 @@ public class LoginFragment extends Fragment implements AuthContract.View{
         return true;
     }
 
+//    @Override
+//    public void onSuccess(UserModel userModel, boolean isUserDetailSaved) {
+//        Utils.showMessage(getContext(), "Login Successfully");
+//    }
+
     @Override
-    public void onSuccess(UserModel userModel, boolean isUserDetailSaved) {
-        Utils.showMessage(getContext(),"Login Successfully");
+    public void onSuccess(UserModel userModel, boolean isUser) {
+
     }
 
     @Override
     public void onFailure(String message) {
-        Utils.showMessage(getContext(),message);
+        Utils.showMessage(getContext(), message);
     }
 
     @Override
@@ -100,5 +115,20 @@ public class LoginFragment extends Fragment implements AuthContract.View{
     @Override
     public void hideProgress() {
 
+    }
+
+    @Override
+    public void onLoginSuccess(FirebaseUser firebaseUser) {
+        if (firebaseUser != null) {
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences(PREF_FILENAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(Constants.PREF_EMAIL, firebaseUser.getEmail());
+            editor.putString(Constants.PREF_NAME, firebaseUser.getDisplayName());
+            editor.putString(Constants.PREF_USER_ID, firebaseUser.getUid());
+            editor.apply();
+            Utils.showMessage(getContext(), getString(R.string.login_successfully));
+            Utils.navigateScreen(getContext(), DashBoardActivity.class);
+            requireActivity().finishAffinity();
+        }
     }
 }

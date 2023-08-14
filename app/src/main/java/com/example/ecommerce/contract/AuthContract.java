@@ -1,13 +1,16 @@
 package com.example.ecommerce.contract;
 
 import com.example.ecommerce.models.UserModel;
+import com.google.firebase.auth.FirebaseUser;
 
 public interface AuthContract {
 
 
     interface Presenter {
         void doSignUp(String userName, String email, String password);
+
         void saveUserDetails(UserModel userModel);
+
         void doLogin(String email, String password);
     }
 
@@ -17,7 +20,11 @@ public interface AuthContract {
         void onFailure(String message);
 
         void showProgress();
+
         void hideProgress();
+
+        void onLoginSuccess(FirebaseUser firebaseUser);
+
     }
 
 }

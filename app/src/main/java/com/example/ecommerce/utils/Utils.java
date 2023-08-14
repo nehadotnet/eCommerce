@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.ecommerce.view.activities.AuthActivity;
 import com.github.ybq.android.spinkit.SpinKitView;
 
 import java.util.regex.Pattern;

@@ -1,10 +1,14 @@
 package com.example.ecommerce.contract;
 
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.example.ecommerce.models.UserModel;
+import com.example.ecommerce.utils.Constants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -15,6 +19,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AuthContractImpl implements AuthContract.Presenter {
     AuthContract.View view;
+    private Context context;
+    private String email;
+    private String uid;
 
     public AuthContractImpl(AuthContract.View view) {
         this.view = view;
@@ -72,8 +79,7 @@ public class AuthContractImpl implements AuthContract.Presenter {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             view.hideProgress();
-                            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                            view.onSuccess(null,false);
+                            view.onLoginSuccess(firebaseAuth.getCurrentUser());
                         }
                     }
                 })
@@ -85,6 +91,5 @@ public class AuthContractImpl implements AuthContract.Presenter {
                     }
                 });
     }
-
 
 }
