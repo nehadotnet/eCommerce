@@ -1,6 +1,7 @@
 package com.example.ecommerce.view.fragments;
 
 import static com.example.ecommerce.utils.Utils.isValidEmail;
+import static com.example.ecommerce.utils.Utils.showMessage;
 
 import android.os.Bundle;
 
@@ -12,13 +13,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ecommerce.R;
+import com.example.ecommerce.contract.AuthContract;
+import com.example.ecommerce.contract.AuthContractImpl;
+import com.example.ecommerce.models.UserModel;
+import com.example.ecommerce.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
 
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment implements AuthContract.View{
 
     TextInputEditText txtEmail, txtPassword;
     AppCompatButton btnLogin;
+    AuthContractImpl authContract;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,6 +39,7 @@ public class LoginFragment extends Fragment {
         txtEmail = view.findViewById(R.id.txt_email);
         txtPassword = view.findViewById(R.id.txt_password);
         btnLogin = view.findViewById(R.id.btn_login);
+        authContract=new AuthContractImpl(this);
 
         setUI();
     }
@@ -41,22 +48,23 @@ public class LoginFragment extends Fragment {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkValidation()) {
-
+                String email = txtEmail.getText().toString();
+                String password = txtPassword.getText().toString();
+                if (checkValidation(email,password)) {
+                    authContract.doLogin(email,password);
                 }
             }
         });
     }
 
-    private boolean checkValidation() {
-        String email = txtEmail.getText().toString();
-        String password = txtPassword.getText().toString();
+    private boolean checkValidation(String email, String password) {
+
         if (email.length() == 0) {
             txtEmail.setError(getString(R.string.enter_email));
             txtEmail.requestFocus();
             return false;
         }
-        if (isValidEmail(email)) {
+        if (!isValidEmail(email)) {
             txtEmail.setError(getString(R.string.enter_valid_email_id));
             txtEmail.requestFocus();
             return false;
@@ -72,5 +80,25 @@ public class LoginFragment extends Fragment {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onSuccess(UserModel userModel, boolean isUserDetailSaved) {
+        Utils.showMessage(getContext(),"Login Successfully");
+    }
+
+    @Override
+    public void onFailure(String message) {
+        Utils.showMessage(getContext(),message);
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
     }
 }

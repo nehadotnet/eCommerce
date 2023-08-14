@@ -17,12 +17,14 @@ import com.example.ecommerce.contract.AuthContract;
 import com.example.ecommerce.contract.AuthContractImpl;
 import com.example.ecommerce.models.UserModel;
 import com.example.ecommerce.utils.Utils;
+import com.github.ybq.android.spinkit.SpinKitView;
 
 public class SignUpFragment extends Fragment implements AuthContract.View {
     TextView txtUserName, txtEmail, txtPassword;
     AppCompatButton btnSignUp;
 
     AuthContractImpl authContract;
+    SpinKitView spinKitView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,6 +40,7 @@ public class SignUpFragment extends Fragment implements AuthContract.View {
         txtEmail = view.findViewById(R.id.txt_email);
         txtPassword = view.findViewById(R.id.txt_password);
         btnSignUp = view.findViewById(R.id.btn_signup);
+        spinKitView=view.findViewById(R.id.spin_kit);
         authContract = new AuthContractImpl(this);
         setUI();
     }
@@ -99,11 +102,12 @@ public class SignUpFragment extends Fragment implements AuthContract.View {
 
     @Override
     public void showProgress() {
-
+       Utils.showLoadingIndicator(spinKitView);
+       // spinKitView.setVisibility(View.VISIBLE);
     }
-
     @Override
     public void hideProgress() {
-
+       Utils.hideLoadingIndicator(spinKitView);
+        //spinKitView.setVisibility(View.GONE);
     }
 }
