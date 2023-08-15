@@ -22,12 +22,9 @@ import com.example.ecommerce.contract.AuthContractImpl;
 import com.example.ecommerce.models.UserModel;
 import com.example.ecommerce.utils.Constants;
 import com.example.ecommerce.utils.Utils;
-import com.example.ecommerce.view.activities.DashBoardActivity;
-import com.example.ecommerce.view.activities.SplashActivity;
+import com.example.ecommerce.view.activities.DashboardActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.Objects;
 
 
 public class LoginFragment extends Fragment implements AuthContract.View {
@@ -127,7 +124,7 @@ public class LoginFragment extends Fragment implements AuthContract.View {
             editor.putString(Constants.PREF_USER_ID, firebaseUser.getUid());
             editor.apply();
             Utils.showMessage(getContext(), getString(R.string.login_successfully));
-            Utils.navigateScreen(getContext(), DashBoardActivity.class);
+            Utils.navigateScreen(getContext(), DashboardActivity.class);
             requireActivity().finishAffinity();
         }
     }

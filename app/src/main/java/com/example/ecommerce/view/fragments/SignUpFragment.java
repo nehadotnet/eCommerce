@@ -1,22 +1,39 @@
 package com.example.ecommerce.view.fragments;
 
 import static com.example.ecommerce.utils.Utils.isValidEmail;
+import static com.example.ecommerce.utils.Utils.navigateScreen;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.ecommerce.NotificationActivity;
 import com.example.ecommerce.R;
 import com.example.ecommerce.contract.AuthContract;
 import com.example.ecommerce.contract.AuthContractImpl;
 import com.example.ecommerce.models.UserModel;
 import com.example.ecommerce.utils.Utils;
+import com.example.ecommerce.view.activities.SplashActivity;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -43,6 +60,15 @@ public class SignUpFragment extends Fragment implements AuthContract.View {
         btnSignUp = view.findViewById(R.id.btn_signup);
         spinKitView = view.findViewById(R.id.spin_kit);
         authContract = new AuthContractImpl(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(getContext()
+                    , Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions((Activity) getContext(),
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
         setUI();
     }
 
@@ -93,11 +119,50 @@ public class SignUpFragment extends Fragment implements AuthContract.View {
             authContract.saveUserDetails(userModel);
         } else {
             Utils.showMessage(getContext(), getString(R.string.user_registered_successfully));
+            clearControls();
             showNotification();
         }
     }
 
+    private void clearControls() {
+        txtUserName.setText("");
+        txtEmail.setText("");
+        txtPassword.setText("");
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_container, new LoginFragment());
+        ft.commit();
+    }
+
     private void showNotification() {
+        String channelID = "CHANNEL_ID_NOTIFICATION";
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(getContext(), channelID);
+        builder.setSmallIcon(R.drawable.logo)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.thanks_for_registering))
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        Intent intent = new Intent(getContext(), SplashActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(),
+                0, intent, PendingIntent.FLAG_IMMUTABLE);
+        builder.setContentIntent(pendingIntent);
+        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel =
+                    notificationManager.getNotificationChannel(channelID);
+            if (notificationChannel == null) {
+                notificationChannel = new NotificationChannel(channelID,
+                        getString(R.string.your_registration_has_been_successful), NotificationManager.IMPORTANCE_HIGH);
+                notificationChannel.setLightColor(Color.GREEN);
+                notificationChannel.enableVibration(true);
+                notificationManager.createNotificationChannel(notificationChannel);
+            }
+        }
+        notificationManager.notify(0, builder.build());
     }
 
     @Override

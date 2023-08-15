@@ -5,6 +5,7 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="colorPrimary">@color/aqua_blue</item>
         <item name="colorPrimaryDark">@color/pacific_blue</item>
+        <item name="android:textColorSecondary">@color/white</item>
     </style>
     
     <style name="CustomButton">

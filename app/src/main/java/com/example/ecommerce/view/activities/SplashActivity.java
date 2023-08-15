@@ -1,7 +1,6 @@
 package com.example.ecommerce.view.activities;
 
 import static com.example.ecommerce.utils.Constants.PREF_EMAIL;
-import static com.example.ecommerce.utils.Constants.PREF_NAME;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -36,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
                 String userId = sharedPreferences.getString(Constants.PREF_USER_ID, "");
                 String email = sharedPreferences.getString(PREF_EMAIL, "");
                 if (userId.length() > 0 && email.length() > 0) {
-                    Utils.navigateScreen(SplashActivity.this, DashBoardActivity.class);
+                    Utils.navigateScreen(SplashActivity.this, DashboardActivity.class);
                     finishAffinity();
                 } else {
                     Utils.navigateScreen(SplashActivity.this, AuthActivity.class);
