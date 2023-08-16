@@ -4,17 +4,23 @@ package com.example.ecommerce.view.fragments;
 import static android.content.Context.MODE_PRIVATE;
 import static com.example.ecommerce.utils.Constants.PREF_FILENAME;
 import static com.example.ecommerce.utils.Utils.isValidEmail;
+import static com.example.ecommerce.utils.Utils.navigateScreen;
+import static com.example.ecommerce.utils.Utils.replaceFragment;
 
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.TextView;
 
 import com.example.ecommerce.R;
 import com.example.ecommerce.contract.AuthContract;
@@ -23,6 +29,7 @@ import com.example.ecommerce.models.UserModel;
 import com.example.ecommerce.utils.Constants;
 import com.example.ecommerce.utils.Utils;
 import com.example.ecommerce.view.activities.DashboardActivity;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -32,6 +39,9 @@ public class LoginFragment extends Fragment implements AuthContract.View {
     TextInputEditText txtEmail, txtPassword;
     AppCompatButton btnLogin;
     AuthContractImpl authContract;
+    AppCompatCheckBox chkRememberMe;
+    CircularProgressIndicator progressBar;
+    TextView tvSignUp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,22 +56,25 @@ public class LoginFragment extends Fragment implements AuthContract.View {
         txtEmail = view.findViewById(R.id.txt_email);
         txtPassword = view.findViewById(R.id.txt_password);
         btnLogin = view.findViewById(R.id.btn_login);
+        chkRememberMe = view.findViewById(R.id.chk_remember_me);
+        progressBar = view.findViewById(R.id.progress_bar);
+        tvSignUp = view.findViewById(R.id.tv_sign_up);
+
         authContract = new AuthContractImpl(this);
 
         setUI();
     }
 
     private void setUI() {
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = txtEmail.getText().toString();
-                String password = txtPassword.getText().toString();
-                if (checkValidation(email, password)) {
-                    authContract.doLogin(email, password);
-                }
+        btnLogin.setOnClickListener(v -> {
+            String email = txtEmail.getText().toString();
+            String password = txtPassword.getText().toString();
+            if (checkValidation(email, password)) {
+                authContract.doLogin(email, password);
             }
         });
+        tvSignUp.setOnClickListener(v -> replaceFragment(getActivity().getSupportFragmentManager(), R.id.fragment_container, new SignUpFragment()));
+
     }
 
     private boolean checkValidation(String email, String password) {
@@ -89,11 +102,6 @@ public class LoginFragment extends Fragment implements AuthContract.View {
         return true;
     }
 
-//    @Override
-//    public void onSuccess(UserModel userModel, boolean isUserDetailSaved) {
-//        Utils.showMessage(getContext(), "Login Successfully");
-//    }
-
     @Override
     public void onSuccess(UserModel userModel, boolean isUser) {
 
@@ -106,12 +114,12 @@ public class LoginFragment extends Fragment implements AuthContract.View {
 
     @Override
     public void showProgress() {
-
+        Utils.showLoadingIndicator(progressBar);
     }
 
     @Override
     public void hideProgress() {
-
+        Utils.hideLoadingIndicator(progressBar);
     }
 
     @Override

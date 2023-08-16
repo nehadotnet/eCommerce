@@ -7,4 +7,5 @@ public interface Constants {
      String PREF_NAME = "username";
      String PREF_TOKEN = "token";
      String PREF_USER_ID = "userId";
+     String PREF_PASSWORD="password";
 }

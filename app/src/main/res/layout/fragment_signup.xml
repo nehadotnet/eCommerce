@@ -99,6 +99,7 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/tv_sign_in"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/sign_in"
@@ -114,14 +115,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/spin_kit"
-                style="@style/SpinKitView.FadingCircle"
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progress_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:visibility="gone"
-                app:SpinKit_Color="@color/pacific_blue" />
+                android:indeterminate="true"
+                android:visibility="gone" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 

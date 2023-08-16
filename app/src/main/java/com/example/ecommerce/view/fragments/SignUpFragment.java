@@ -2,6 +2,7 @@ package com.example.ecommerce.view.fragments;
 
 import static com.example.ecommerce.utils.Utils.isValidEmail;
 import static com.example.ecommerce.utils.Utils.navigateScreen;
+import static com.example.ecommerce.utils.Utils.replaceFragment;
 
 import android.Manifest;
 import android.app.Activity;
@@ -35,6 +36,7 @@ import com.example.ecommerce.models.UserModel;
 import com.example.ecommerce.utils.Utils;
 import com.example.ecommerce.view.activities.SplashActivity;
 import com.github.ybq.android.spinkit.SpinKitView;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SignUpFragment extends Fragment implements AuthContract.View {
@@ -42,7 +44,8 @@ public class SignUpFragment extends Fragment implements AuthContract.View {
     AppCompatButton btnSignUp;
 
     AuthContractImpl authContract;
-    SpinKitView spinKitView;
+    CircularProgressIndicator progressBar;
+    TextView tvSignIn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,7 +61,9 @@ public class SignUpFragment extends Fragment implements AuthContract.View {
         txtEmail = view.findViewById(R.id.txt_email);
         txtPassword = view.findViewById(R.id.txt_password);
         btnSignUp = view.findViewById(R.id.btn_signup);
-        spinKitView = view.findViewById(R.id.spin_kit);
+        progressBar=view.findViewById(R.id.progress_bar);
+        tvSignIn=view.findViewById(R.id.tv_sign_in);
+
         authContract = new AuthContractImpl(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -79,6 +84,12 @@ public class SignUpFragment extends Fragment implements AuthContract.View {
             String password = txtPassword.getText().toString();
             if (checkValidation(userName, email, password)) {
                 authContract.doSignUp(userName, email, password);
+            }
+        });
+        tvSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(getActivity().getSupportFragmentManager(),R.id.fragment_container,new LoginFragment());
             }
         });
     }
@@ -128,9 +139,7 @@ public class SignUpFragment extends Fragment implements AuthContract.View {
         txtUserName.setText("");
         txtEmail.setText("");
         txtPassword.setText("");
-        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment_container, new LoginFragment());
-        ft.commit();
+        replaceFragment(getActivity().getSupportFragmentManager(),R.id.fragment_container,new LoginFragment());
     }
 
     private void showNotification() {
@@ -172,12 +181,12 @@ public class SignUpFragment extends Fragment implements AuthContract.View {
 
     @Override
     public void showProgress() {
-        Utils.showLoadingIndicator(spinKitView);
+        Utils.showLoadingIndicator(progressBar);
     }
 
     @Override
     public void hideProgress() {
-        Utils.hideLoadingIndicator(spinKitView);
+        Utils.hideLoadingIndicator(progressBar);
     }
 
     @Override

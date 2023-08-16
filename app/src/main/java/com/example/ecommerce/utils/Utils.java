@@ -7,9 +7,15 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.example.ecommerce.R;
 import com.example.ecommerce.view.activities.AuthActivity;
+import com.example.ecommerce.view.fragments.SignUpFragment;
 import com.github.ybq.android.spinkit.SpinKitView;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import java.util.regex.Pattern;
 
@@ -35,5 +41,18 @@ public class Utils {
 
     public static void hideLoadingIndicator(SpinKitView spinKitView) {
         spinKitView.setVisibility(View.GONE);
+    }
+    public static void showLoadingIndicator(CircularProgressIndicator progressIndicator) {
+        progressIndicator.setVisibility(View.VISIBLE);
+    }
+
+    public static void hideLoadingIndicator(CircularProgressIndicator progressIndicator) {
+        progressIndicator.setVisibility(View.GONE);
+    }
+
+    public static  void replaceFragment(FragmentManager fragmentManager, int containerId, Fragment fragment){
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.replace(containerId,fragment);
+        ft.commit();
     }
 }
