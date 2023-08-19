@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".view.activities.DashboardActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/app_bar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="56dp"
+            android:background="@drawable/top_background_image"
+            app:menu="@menu/option_menu"
+            app:title="@string/app_name"
+            app:titleTextColor="@color/white" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:background="@drawable/top_background_image"
-                app:menu="@menu/option_menu"
-                app:title="@string/app_name"
-                app:titleTextColor="@color/white" />
-
-        </com.google.android.material.appbar.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
 
     <FrameLayout
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:layout_marginBottom="?attr/actionBarSize" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -35,9 +37,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:itemBackground="@color/white"
-        android:layout_alignParentBottom="true"
         app:itemIconTint="@drawable/nav_item_color_state"
         app:itemTextColor="@drawable/nav_item_color_state"
-        app:menu="@menu/bottom_nav_items"
-        app:labelVisibilityMode="labeled"/>
-</RelativeLayout>
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_items" />
+</LinearLayout>

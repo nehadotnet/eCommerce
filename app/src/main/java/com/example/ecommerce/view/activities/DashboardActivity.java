@@ -3,7 +3,9 @@ package com.example.ecommerce.view.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -11,9 +13,11 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.ecommerce.R;
 import com.example.ecommerce.utils.Constants;
@@ -46,21 +50,19 @@ public class DashboardActivity extends AppCompatActivity {
                 Fragment fragment = null;
                 if (id == R.id.nav_home) {
                     fragment = new HomeFragment();
-                    title = "Home";
+                    title = getString(R.string.title_home);
                 } else if (id == R.id.nav_account) {
                     fragment = new AccountFragment();
-                    title = "Account";
+                    title = getString(R.string.title_account);
                 } else if (id == R.id.nav_cart) {
                     fragment = new CartFragment();
-                    title = "Cart";
+                    title = getString(R.string.title_cart);
                 } else if (id == R.id.nav_category) {
                     fragment = new CategoryFragment();
-                    title = "Categories";
+                    title = getString(R.string.title_categories);
                 }
                 if (fragment != null) {
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.frame_container, fragment);
-                    ft.commit();
+                    Utils.replaceFragment(getSupportFragmentManager(), R.id.frame_container, fragment);
                     if (title.length() != 0 && getSupportActionBar() != null) {
                         getSupportActionBar().setTitle(title);
                     }
@@ -76,40 +78,31 @@ public class DashboardActivity extends AppCompatActivity {
     @SuppressLint("RestrictedApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        new MenuInflater(this).inflate(R.menu.option_menu, menu);
-        if (menu instanceof MenuBuilder) {
-            MenuBuilder m = (MenuBuilder) menu;
-            m.setOptionalIconsVisible(true);
-        }
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.option_menu, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint(getString(R.string.search_for));
+        //searchView.setIconified(false);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.e("TAG", "onQueryTextSubmit: " + query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.e("TAG", "onQueryTextSubmit: " + newText);
+                return true;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.opt_profile) {
-            Utils.showMessage(this, "Profile menu");
-        } else if (itemId == R.id.opt_setting) {
-            Utils.showMessage(this, "Setting menu");
-        } else if (itemId == R.id.opt_logout) {
-            userLogout();
-        }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void userLogout() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.logout))
-                .setMessage(getString(R.string.are_you_sure_you_want_to_logout))
-                .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
-                    SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREF_FILENAME, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.clear();
-                    editor.apply();
-                    Utils.navigateScreen(DashboardActivity.this, SplashActivity.class);
-                    finishAffinity();
-                }).setNegativeButton(getString(R.string.no), (dialog, which) -> {
-                });
-        builder.show();
     }
 }

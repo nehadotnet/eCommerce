@@ -4,23 +4,18 @@ package com.example.ecommerce.view.fragments;
 import static android.content.Context.MODE_PRIVATE;
 import static com.example.ecommerce.utils.Constants.PREF_FILENAME;
 import static com.example.ecommerce.utils.Utils.isValidEmail;
-import static com.example.ecommerce.utils.Utils.navigateScreen;
 import static com.example.ecommerce.utils.Utils.replaceFragment;
-
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.TextView;
 
 import com.example.ecommerce.R;
 import com.example.ecommerce.contract.AuthContract;

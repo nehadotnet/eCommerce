@@ -31,4 +31,14 @@
     <string name="account">Account</string>
     <string name="cart">Cart</string>
     <string name="categories">Categories</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="settings">settings</string>
+    <string name="select_language">Select Language</string>
+    <string name="title_categories">Categories</string>
+    <string name="title_cart">Cart</string>
+    <string name="title_account">Account</string>
+    <string name="title_home">Home</string>
+    <string name="search_for">Search for</string>
+    <string name="title_search">Search</string>
 </resources>

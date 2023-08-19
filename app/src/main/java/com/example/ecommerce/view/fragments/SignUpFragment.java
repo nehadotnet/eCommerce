@@ -1,7 +1,6 @@
 package com.example.ecommerce.view.fragments;
 
 import static com.example.ecommerce.utils.Utils.isValidEmail;
-import static com.example.ecommerce.utils.Utils.navigateScreen;
 import static com.example.ecommerce.utils.Utils.replaceFragment;
 
 import android.Manifest;
@@ -21,21 +20,18 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.ecommerce.NotificationActivity;
 import com.example.ecommerce.R;
 import com.example.ecommerce.contract.AuthContract;
 import com.example.ecommerce.contract.AuthContractImpl;
 import com.example.ecommerce.models.UserModel;
 import com.example.ecommerce.utils.Utils;
 import com.example.ecommerce.view.activities.SplashActivity;
-import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -61,8 +57,8 @@ public class SignUpFragment extends Fragment implements AuthContract.View {
         txtEmail = view.findViewById(R.id.txt_email);
         txtPassword = view.findViewById(R.id.txt_password);
         btnSignUp = view.findViewById(R.id.btn_signup);
-        progressBar=view.findViewById(R.id.progress_bar);
-        tvSignIn=view.findViewById(R.id.tv_sign_in);
+        progressBar = view.findViewById(R.id.progress_bar);
+        tvSignIn = view.findViewById(R.id.tv_sign_in);
 
         authContract = new AuthContractImpl(this);
 
@@ -89,7 +85,7 @@ public class SignUpFragment extends Fragment implements AuthContract.View {
         tvSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceFragment(getActivity().getSupportFragmentManager(),R.id.fragment_container,new LoginFragment());
+                replaceFragment(getActivity().getSupportFragmentManager(), R.id.fragment_container, new LoginFragment());
             }
         });
     }
@@ -139,7 +135,7 @@ public class SignUpFragment extends Fragment implements AuthContract.View {
         txtUserName.setText("");
         txtEmail.setText("");
         txtPassword.setText("");
-        replaceFragment(getActivity().getSupportFragmentManager(),R.id.fragment_container,new LoginFragment());
+        replaceFragment(getActivity().getSupportFragmentManager(), R.id.fragment_container, new LoginFragment());
     }
 
     private void showNotification() {

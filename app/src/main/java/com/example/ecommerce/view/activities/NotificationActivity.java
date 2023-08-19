@@ -1,8 +1,10 @@
-package com.example.ecommerce;
+package com.example.ecommerce.view.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.ecommerce.R;
 
 public class NotificationActivity extends AppCompatActivity {
 
