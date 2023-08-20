@@ -9,12 +9,15 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ecommerce.R;
 import com.example.ecommerce.adapter.AccountItemAdapter;
+import com.example.ecommerce.contract.AccountContract;
+import com.example.ecommerce.contract.AccountContractImpl;
 import com.example.ecommerce.listeners.OnItemClickListener;
 import com.example.ecommerce.models.AccountItemsModel;
 import com.example.ecommerce.utils.Constants;
@@ -24,10 +27,11 @@ import com.example.ecommerce.view.activities.SplashActivity;
 
 import java.util.ArrayList;
 
-public class AccountFragment extends Fragment implements OnItemClickListener {
+public class AccountFragment extends Fragment implements OnItemClickListener, AccountContract.View {
     RecyclerView rvItems;
     ArrayList<AccountItemsModel> accountItemsModels = new ArrayList<>();
     AccountItemAdapter itemListAdapter;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,16 +45,8 @@ public class AccountFragment extends Fragment implements OnItemClickListener {
     private void initUI(View view) {
         rvItems = view.findViewById(R.id.rv_items);
 
-        setItemList();
-    }
-
-    private void setItemList() {
-        accountItemsModels.add(new AccountItemsModel(10, R.drawable.edit_profile, "Edit Profile"));
-        accountItemsModels.add(new AccountItemsModel(20, R.drawable.baseline_settings, "Settings"));
-        accountItemsModels.add(new AccountItemsModel(30, R.drawable.address, "Saved Address"));
-        accountItemsModels.add(new AccountItemsModel(40, R.drawable.baseline_logout, "Logout"));
-        itemListAdapter = new AccountItemAdapter(getContext(), accountItemsModels, this);
-        rvItems.setAdapter(itemListAdapter);
+        AccountContractImpl accountContract = new AccountContractImpl(this);
+        accountContract.loadAccountItems();
     }
 
     @Override
@@ -80,5 +76,14 @@ public class AccountFragment extends Fragment implements OnItemClickListener {
                 }).setNegativeButton(getString(R.string.no), (dialog, which) -> {
                 });
         builder.show();
+    }
+
+    @Override
+    public void showAccountItems(ArrayList<AccountItemsModel> accountItemsModelArrayList) {
+        Utils.showMessage(getContext(), "LoadMethod Calling " + accountItemsModelArrayList.size());
+        if (accountItemsModelArrayList.size() > 0 && accountItemsModelArrayList != null) {
+            itemListAdapter = new AccountItemAdapter(getContext(), accountItemsModelArrayList, this);
+            rvItems.setAdapter(itemListAdapter);
+        }
     }
 }

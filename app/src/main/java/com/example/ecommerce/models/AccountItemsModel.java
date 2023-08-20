@@ -5,6 +5,10 @@ public class AccountItemsModel {
     private int titleId, imageId;
     private String itemName;
 
+    public AccountItemsModel(){
+
+    }
+
     public AccountItemsModel(int titleId, int imageId, String itemName) {
         this.titleId = titleId;
         this.imageId = imageId;
