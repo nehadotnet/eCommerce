@@ -58,7 +58,7 @@ public class AuthContractImpl implements AuthContract.Presenter {
     public void saveUserDetails(UserModel userModel) {
         view.showProgress();
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection("users").document().set(userModel)
+        firestore.collection("users").document(userModel.getUserId()).set(userModel)
                 .addOnSuccessListener(documentReference -> {
                     view.hideProgress();
                     view.onSuccess(new UserModel(), true);

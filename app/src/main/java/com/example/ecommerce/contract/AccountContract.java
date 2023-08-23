@@ -11,5 +11,8 @@ public interface AccountContract {
 
     interface View {
         void showAccountItems(ArrayList<AccountItemsModel> accountItemsModelArrayList);
+        void showProgress();
+
+        void hideProgress();
     }
 }

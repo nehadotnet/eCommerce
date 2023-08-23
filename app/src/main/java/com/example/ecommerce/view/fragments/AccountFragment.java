@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.example.ecommerce.R;
 import com.example.ecommerce.adapter.AccountItemAdapter;
@@ -23,12 +24,15 @@ import com.example.ecommerce.models.AccountItemsModel;
 import com.example.ecommerce.utils.Constants;
 import com.example.ecommerce.utils.Utils;
 import com.example.ecommerce.view.activities.DashboardActivity;
+import com.example.ecommerce.view.activities.EditProfileActivity;
 import com.example.ecommerce.view.activities.SplashActivity;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import java.util.ArrayList;
 
 public class AccountFragment extends Fragment implements OnItemClickListener, AccountContract.View {
     RecyclerView rvItems;
+    CircularProgressIndicator progressBar;
     ArrayList<AccountItemsModel> accountItemsModels = new ArrayList<>();
     AccountItemAdapter itemListAdapter;
 
@@ -44,6 +48,7 @@ public class AccountFragment extends Fragment implements OnItemClickListener, Ac
 
     private void initUI(View view) {
         rvItems = view.findViewById(R.id.rv_items);
+        progressBar = view.findViewById(R.id.progress_bar);
 
         AccountContractImpl accountContract = new AccountContractImpl(this);
         accountContract.loadAccountItems();
@@ -52,7 +57,7 @@ public class AccountFragment extends Fragment implements OnItemClickListener, Ac
     @Override
     public void onItemClick(int position) {
         if (position == 0) {
-            Utils.showMessage(getContext(), getString(R.string.edit_profile));
+            Utils.navigateScreen(getContext(), EditProfileActivity.class);
         } else if (position == 1) {
             Utils.showMessage(getContext(), getString(R.string.settings));
         } else if (position == 2) {
@@ -80,10 +85,19 @@ public class AccountFragment extends Fragment implements OnItemClickListener, Ac
 
     @Override
     public void showAccountItems(ArrayList<AccountItemsModel> accountItemsModelArrayList) {
-        Utils.showMessage(getContext(), "LoadMethod Calling " + accountItemsModelArrayList.size());
         if (accountItemsModelArrayList.size() > 0 && accountItemsModelArrayList != null) {
             itemListAdapter = new AccountItemAdapter(getContext(), accountItemsModelArrayList, this);
             rvItems.setAdapter(itemListAdapter);
         }
+    }
+
+    @Override
+    public void showProgress() {
+        Utils.showLoadingIndicator(progressBar);
+    }
+
+    @Override
+    public void hideProgress() {
+        Utils.hideLoadingIndicator(progressBar);
     }
 }

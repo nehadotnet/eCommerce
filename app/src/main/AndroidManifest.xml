@@ -25,6 +25,15 @@
         android:theme="@style/Theme.ECommerce"
         tools:targetApi="31">
         <activity
+            android:name=".view.activities.AddressActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activities.SettingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activities.EditProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.activities.NotificationActivity"
             android:exported="false" />
         <activity

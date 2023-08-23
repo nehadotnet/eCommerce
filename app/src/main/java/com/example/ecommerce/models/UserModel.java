@@ -5,6 +5,17 @@ public class UserModel {
     private String userName;
     private String email;
     private String password;
+    private String address;
+    private String phoneNumber;
+
+    public UserModel(String userId, String userName, String email, String password, String address, String phoneNumber) {
+        this.userId = userId;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+    }
 
     public UserModel() {
     }
@@ -14,6 +25,22 @@ public class UserModel {
         this.userName = userName;
         this.email = email;
         this.password = password;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getUserId() {

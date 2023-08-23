@@ -24,6 +24,7 @@ public class AccountContractImpl implements AccountContract.Presenter {
 
     @Override
     public void loadAccountItems() {
+        view.showProgress();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("account_items")
                 .orderBy("titleId", Query.Direction.ASCENDING)
@@ -32,6 +33,7 @@ public class AccountContractImpl implements AccountContract.Presenter {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            view.hideProgress();
                             ArrayList<AccountItemsModel> accountItemsModelArrayList=new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.e("TAG", document.getId() + " => " + document.getData());
