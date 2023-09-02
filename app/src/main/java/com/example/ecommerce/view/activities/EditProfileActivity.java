@@ -1,14 +1,26 @@
 package com.example.ecommerce.view.activities;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.View;
+import static com.example.ecommerce.utils.Constants.CAMERA_REQ_CODE;
+import static com.example.ecommerce.utils.Constants.GALLERY_REQ_CODE;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.ArrayAdapter;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
 import com.example.ecommerce.R;
 import com.example.ecommerce.contract.EditProfileContract;
 import com.example.ecommerce.contract.EditProfileContractImpl;
@@ -18,6 +30,8 @@ import com.example.ecommerce.utils.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -33,6 +47,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
     EditProfileContractImpl editProfileContract;
 
     SharedPreferences sharedPreferences;
+    private Bitmap imageBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +79,46 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
         }
 
         setUserDetails();
-        updateUserProfile();
+        setListeners();
         profileImage.setImageResource(R.drawable.profile);
-        // loadUserDetails();
-
     }
 
-    private void updateUserProfile() {
+    private void setListeners() {
+        fabBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(EditProfileActivity.this);
+                builderSingle.setIcon(R.drawable.baseline_camera);
+                builderSingle.setTitle("Select an Option:");
+
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(EditProfileActivity.this, android.R.layout.select_dialog_item);
+                arrayAdapter.add("Gallery");
+                arrayAdapter.add("Camera");
+
+                builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            // Open gallery
+                            Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(galleryIntent, GALLERY_REQ_CODE);
+                        } else if (which == 1) {
+                            // Open camera
+                            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(cameraIntent, CAMERA_REQ_CODE);
+                        }
+                    }
+                });
+                builderSingle.show();
+            }
+        });
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,6 +129,29 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
 
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CAMERA_REQ_CODE) {
+                imageBitmap = (Bitmap) (data.getExtras().get("data"));
+                profileImage.setImageBitmap(imageBitmap);
+            }
+            if (requestCode == GALLERY_REQ_CODE) {
+                profileImage.setImageURI(data.getData());
+                imageBitmap = getBitmapFromUri(data.getData());
+            }
+        }
+    }
+
+    private Bitmap getBitmapFromUri(Uri data) {
+        try {
+            return MediaStore.Images.Media.getBitmap(this.getContentResolver(), data);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void setUserDetails() {
@@ -97,14 +168,22 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
             etEmail.setText(userModel.getEmail());
             etAddress.setText(userModel.getAddress());
             etPhone.setText(userModel.getPhoneNumber());
+            String profileImageUrl = userModel.getProfileImageUrl();
+            if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                Glide.with(this)
+                        .load(profileImageUrl)
+                        .into(profileImage);
+            } else {
+                // If no profile image is available, you can set a default image
+                profileImage.setImageResource(R.drawable.profile);
+            }
         }
     }
 
     @Override
     public void showUpdateSuccess(String result, boolean isSuccess) {
-        Utils.showMessage(this, result);
         if (isSuccess) {
-            Utils.navigateScreen(this, DashboardActivity.class);
+            editProfileContract.uploadImage(imageBitmap);
         }
     }
 
@@ -116,5 +195,16 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
     @Override
     public void hideProgress() {
         Utils.hideLoadingIndicator(progressBar);
+    }
+
+    @Override
+    public void onImageUploadSuccess(String imageUrl, String message) {
+        Utils.showMessage(this, message);
+        Utils.navigateScreen(this, DashboardActivity.class);
+    }
+
+    @Override
+    public void onImageUploadFailure() {
+
     }
 }

@@ -1,5 +1,7 @@
 package com.example.ecommerce.contract;
 
+import android.graphics.Bitmap;
+
 import com.example.ecommerce.models.UserModel;
 
 public interface EditProfileContract {
@@ -7,6 +9,8 @@ public interface EditProfileContract {
         void getUserDetails(String email);
 
         void updateUserProfile(String fullName, String phoneNumber, String address);
+        void uploadImage(Bitmap imageBitmap);
+
     }
 
     interface View {
@@ -17,6 +21,9 @@ public interface EditProfileContract {
         void showProgress();
 
         void hideProgress();
+        void onImageUploadSuccess(String imageUrl, String message); // Pass the image URL here
+
+        void onImageUploadFailure();
     }
 
 }

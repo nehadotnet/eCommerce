@@ -7,6 +7,15 @@ public class UserModel {
     private String password;
     private String address;
     private String phoneNumber;
+    private String profileImageUrl;
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
 
     public UserModel(String userId, String userName, String email, String password, String address, String phoneNumber) {
         this.userId = userId;
