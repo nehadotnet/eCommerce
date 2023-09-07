@@ -5,11 +5,16 @@ import com.example.ecommerce.models.HomeItemsModel;
 import java.util.ArrayList;
 
 public interface HomeContract {
-    interface Presenter{
+    interface Presenter {
         void loadItems();
     }
-    interface View{
+
+    interface View {
         void displayItems(ArrayList<HomeItemsModel> homeItemsModelArrayList);
+
+        void showProgress();
+
+        void hideProgress();
 
     }
 }

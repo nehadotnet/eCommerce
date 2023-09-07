@@ -10,4 +10,5 @@ public interface Constants {
      String PREF_PASSWORD="password";
      final int CAMERA_REQ_CODE=100;
      final int GALLERY_REQ_CODE=1000;
+     String PREF_CATEGORY_ID="categoryId";
 }

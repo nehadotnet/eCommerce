@@ -36,6 +36,4 @@ public class HomeItemsModel {
     public void setCategoryImageUrl(String categoryImageUrl) {
         this.categoryImageUrl = categoryImageUrl;
     }
-
-
 }
