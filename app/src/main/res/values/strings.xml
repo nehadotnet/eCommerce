@@ -47,4 +47,5 @@
     <string name="save">Save</string>
     <string name="address">Address</string>
     <string name="category_name">Category Name</string>
+    <string name="strike_25000_strike"><strike> ₹25000 </strike></string>
 </resources>

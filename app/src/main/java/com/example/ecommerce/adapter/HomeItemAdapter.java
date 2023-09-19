@@ -39,6 +39,7 @@ public class HomeItemAdapter extends RecyclerView.Adapter<HomeItemAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull HomeItemAdapter.ViewHolder holder, int position) {
         holder.tvCategoryName.setText(dataSet.get(position).getCategoryTitle());
+        holder.tvCategorySpecial.setText(dataSet.get(position).getCategorySpecial());
         Glide.with(context)
                 .load(dataSet.get(position).getCategoryImageUrl())
                 .placeholder(R.drawable.placeholder)
@@ -60,7 +61,7 @@ public class HomeItemAdapter extends RecyclerView.Adapter<HomeItemAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvCategoryName;
+        TextView tvCategoryName, tvCategorySpecial;
         CardView cvCategory;
         ImageView categoryImage;
 
@@ -69,6 +70,7 @@ public class HomeItemAdapter extends RecyclerView.Adapter<HomeItemAdapter.ViewHo
             tvCategoryName = itemView.findViewById(R.id.tv_category_name);
             cvCategory = itemView.findViewById(R.id.card_view_category);
             categoryImage = itemView.findViewById(R.id.iv_category);
+            tvCategorySpecial = itemView.findViewById(R.id.tv_category_special);
         }
     }
 }

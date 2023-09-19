@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -77,7 +78,9 @@ public class CategoryProductsActivity extends AppCompatActivity implements Produ
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (categoryProductsAdapter != null) {
+                if (newText.isEmpty()) {
+                    categoryProductsAdapter.filter("");
+                } else {
                     categoryProductsAdapter.filter(newText);
                 }
                 return true;
@@ -113,6 +116,11 @@ public class CategoryProductsActivity extends AppCompatActivity implements Produ
 
     @Override
     public void onItemClick(int position) {
-
+        if (position >= 0 && position < productsModelArrayList.size()) {
+            ProductsModel selectedProduct = productsModelArrayList.get(position);
+            Intent intent = new Intent(this, ProductDetailActivity.class);
+            intent.putExtra("selectedProduct", selectedProduct);
+            startActivity(intent);
+        }
     }
 }
