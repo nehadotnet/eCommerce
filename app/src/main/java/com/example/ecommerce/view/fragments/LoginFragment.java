@@ -6,8 +6,10 @@ import static com.example.ecommerce.utils.Constants.PREF_FILENAME;
 import static com.example.ecommerce.utils.Utils.isValidEmail;
 import static com.example.ecommerce.utils.Utils.replaceFragment;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,12 +33,13 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginFragment extends Fragment implements AuthContract.View {
 
-    TextInputEditText txtEmail, txtPassword;
-    AppCompatButton btnLogin;
-    AuthContractImpl authContract;
-    AppCompatCheckBox chkRememberMe;
-    CircularProgressIndicator progressBar;
-    TextView tvSignUp;
+    private TextInputEditText txtEmail, txtPassword;
+    private AppCompatButton btnLogin;
+    private AuthContractImpl authContract;
+    private AppCompatCheckBox chkRememberMe;
+    private CircularProgressIndicator progressBar;
+    private TextView tvSignUp;
+    SharedPreferences sharedPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,23 +61,33 @@ public class LoginFragment extends Fragment implements AuthContract.View {
         authContract = new AuthContractImpl(this);
 
         setUI();
+        // is user has enabled to remember credentials
+        sharedPreferences = getContext().getSharedPreferences(Constants.PREF_FILENAME, Context.MODE_PRIVATE);
+        boolean isRemember = sharedPreferences.getBoolean(Constants.PREF_REMEMBER_ME, false);
+        if (isRemember) {
+            String email = sharedPreferences.getString(Constants.PREF_EMAIL, "");
+            String password = sharedPreferences.getString(Constants.PREF_PASSWORD, "");
+            txtEmail.setText(email);
+            txtPassword.setText(password);
+        }
     }
 
     private void setUI() {
-        btnLogin.setOnClickListener(v -> {
-            String email = txtEmail.getText().toString();
-            String password = txtPassword.getText().toString();
-            if (checkValidation(email, password)) {
-                authContract.doLogin(email, password);
-            }
-        });
+        btnLogin.setOnClickListener(v -> doUserLogin());
         tvSignUp.setOnClickListener(v -> replaceFragment(getActivity().getSupportFragmentManager(), R.id.fragment_container, new SignUpFragment()));
+    }
 
+    private void doUserLogin() {
+        String email = txtEmail.getText().toString().trim();
+        String password = txtPassword.getText().toString().trim();
+        if (checkValidation(email, password)) {
+            authContract.doLogin(email, password);
+        }
     }
 
     private boolean checkValidation(String email, String password) {
 
-        if (email.length() == 0) {
+        if (TextUtils.isEmpty(email)) {
             txtEmail.setError(getString(R.string.enter_email));
             txtEmail.requestFocus();
             return false;
@@ -84,7 +97,7 @@ public class LoginFragment extends Fragment implements AuthContract.View {
             txtEmail.requestFocus();
             return false;
         }
-        if (password.length() == 0) {
+        if (TextUtils.isEmpty(password)) {
             txtPassword.setError(getString(R.string.enter_password));
             txtPassword.requestFocus();
             return false;
@@ -125,6 +138,10 @@ public class LoginFragment extends Fragment implements AuthContract.View {
             editor.putString(Constants.PREF_EMAIL, firebaseUser.getEmail());
             editor.putString(Constants.PREF_NAME, firebaseUser.getDisplayName());
             editor.putString(Constants.PREF_USER_ID, firebaseUser.getUid());
+            editor.putBoolean(Constants.PREF_REMEMBER_ME, chkRememberMe.isChecked());
+            if (chkRememberMe.isChecked()) {
+                editor.putString(Constants.PREF_PASSWORD, txtPassword.getText().toString());
+            }
             editor.apply();
             Utils.showMessage(getContext(), getString(R.string.login_successfully));
             Utils.navigateScreen(getContext(), DashboardActivity.class);

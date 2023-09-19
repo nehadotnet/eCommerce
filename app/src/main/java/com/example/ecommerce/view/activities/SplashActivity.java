@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import com.example.ecommerce.BuildConfig;
@@ -16,15 +17,12 @@ import com.example.ecommerce.utils.Constants;
 import com.example.ecommerce.utils.Utils;
 
 public class SplashActivity extends AppCompatActivity {
-    TextView tvVersion;
-    Intent nextScreen;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        tvVersion = findViewById(R.id.tv_version);
+        TextView tvVersion = findViewById(R.id.tv_version);
         tvVersion.setText(getString(R.string.version_prefix) + BuildConfig.VERSION_NAME);
 
 
@@ -34,13 +32,12 @@ public class SplashActivity extends AppCompatActivity {
                 SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREF_FILENAME, MODE_PRIVATE);
                 String userId = sharedPreferences.getString(Constants.PREF_USER_ID, "");
                 String email = sharedPreferences.getString(PREF_EMAIL, "");
-                if (userId.length() > 0 && email.length() > 0) {
+                if (!TextUtils.isEmpty(userId) && !TextUtils.isEmpty(email)) {
                     Utils.navigateScreen(SplashActivity.this, DashboardActivity.class);
-                    finishAffinity();
                 } else {
                     Utils.navigateScreen(SplashActivity.this, AuthActivity.class);
-                    finishAffinity();
                 }
+                finishAffinity();
             }
         }, Constants.HANDLER_DELAY);
     }

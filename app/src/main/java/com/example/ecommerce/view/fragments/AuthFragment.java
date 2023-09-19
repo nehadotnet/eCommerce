@@ -11,41 +11,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ecommerce.R;
+import com.example.ecommerce.utils.Utils;
 
 
 public class AuthFragment extends Fragment {
-    AppCompatButton btnLogin, btnSignUp;
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_auth, container, false);
-
-        btnLogin = view.findViewById(R.id.btn_login);
-        btnSignUp = view.findViewById(R.id.btn_signup);
-
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction ft = ( getActivity()).getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.fragment_container, new LoginFragment());
-                ft.commit();
-            }
-        });
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.fragment_container, new SignUpFragment());
-                ft.commit();
-            }
-        });
-
+        initView(view);
 
         return view;
+    }
 
+    private void initView(View view) {
+        AppCompatButton btnLogin = view.findViewById(R.id.btn_login);
+        AppCompatButton btnSignUp = view.findViewById(R.id.btn_signup);
 
+        // button listeners
+        btnLogin.setOnClickListener(v -> Utils.replaceFragment(requireActivity().getSupportFragmentManager(), R.id.fragment_container, new LoginFragment()));
+        btnSignUp.setOnClickListener(v -> Utils.replaceFragment(requireActivity().getSupportFragmentManager(), R.id.fragment_container, new SignUpFragment()));
     }
 }

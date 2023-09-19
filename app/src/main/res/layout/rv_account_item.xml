@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -22,7 +23,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center_vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -40,12 +42,12 @@
                         android:id="@+id/tv_item_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="16dp"
                         android:text="Edit Profile"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 

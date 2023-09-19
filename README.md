@@ -20,3 +20,11 @@ This project is implemented using JAVA Language. (Android - Flamingo)
 - Added Designs for Auth base screen, login screen and sign up screen
 - Validation on login and Sign up screen
 - Firebase Setup for Auth and Database
+- MVP (Model-View-Presenter) Architecture setup
+- User registration and user login with firebase firestore database
+- POST Notification (User will receive a notification after registration)
+- Added Bottom Navigation Bar with these options (Home, Category, Cart, Account)
+- Added Account Section Options dynamically using Firestore
+- User profile section - with Edit Profile feature implemented
+- Auto Image Slider Added in Home screen
+- Category list and View product list screens implemented dynamic
