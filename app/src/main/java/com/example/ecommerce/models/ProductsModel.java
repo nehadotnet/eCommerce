@@ -5,22 +5,10 @@ import java.util.List;
 
 public class ProductsModel implements Serializable {
     private int productId;
-    private String productTitle, productImageUrl, categoryTitle, rating, userRated, price, oldPrice, offer,description;
+    private String productTitle, productImageUrl, categoryTitle, rating, userRated, price, oldPrice, offer, description, location;
     private List<String> productImages;
 
     public ProductsModel() {
-    }
-
-    public ProductsModel(int productId, String productTitle, String productImageUrl, String categoryTitle, String rating, String userRated, String price, String oldPrice, String offer) {
-        this.productId = productId;
-        this.productTitle = productTitle;
-        this.productImageUrl = productImageUrl;
-        this.categoryTitle = categoryTitle;
-        this.rating = rating;
-        this.userRated = userRated;
-        this.price = price;
-        this.oldPrice = oldPrice;
-        this.offer = offer;
     }
 
     public String getCategoryTitle() {
@@ -109,5 +97,13 @@ public class ProductsModel implements Serializable {
 
     public void setProductImages(List<String> productImages) {
         this.productImages = productImages;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

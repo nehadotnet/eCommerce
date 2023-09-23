@@ -40,6 +40,8 @@
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="13sp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
                     android:textStyle="bold" />
 
                 <LinearLayout

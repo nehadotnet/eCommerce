@@ -48,4 +48,6 @@
     <string name="address">Address</string>
     <string name="category_name">Category Name</string>
     <string name="strike_25000_strike"><strike> ₹25000 </strike></string>
+    <string name="open_bracket">(</string>
+    <string name="close_bracket">)</string>
 </resources>

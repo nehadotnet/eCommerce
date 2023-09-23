@@ -45,7 +45,7 @@ public class CategoryProductsAdapter extends RecyclerView.Adapter<CategoryProduc
     public void onBindViewHolder(@NonNull CategoryProductsAdapter.ViewHolder holder, int position) {
         holder.tvProductName.setText(dataSet.get(position).getProductTitle());
         holder.tvProductPrice.setText(dataSet.get(position).getPrice());
-        holder.btnProductRating.setText(dataSet.get(position).getRating());
+        holder.btnProductRating.setText(context.getString(R.string.open_bracket) + dataSet.get(position).getRating() + context.getString(R.string.close_bracket));
         holder.tvUserRated.setText(dataSet.get(position).getUserRated());
         holder.tvProductOldPrice.setText(dataSet.get(position).getOldPrice());
         holder.tvProductOffer.setText(dataSet.get(position).getOffer());
