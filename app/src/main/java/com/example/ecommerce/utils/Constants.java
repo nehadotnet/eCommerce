@@ -11,4 +11,5 @@ public interface Constants {
     int CAMERA_REQ_CODE = 100;
     int GALLERY_REQ_CODE = 1000;
     String PREF_REMEMBER_ME = "remember_me";
+    String PRODUCT_SPECS_COL = "product_specs";
 }

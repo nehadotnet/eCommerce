@@ -6,7 +6,7 @@ import java.util.List;
 public class ProductsModel implements Serializable {
     private int productId;
     private String productTitle, productImageUrl, categoryTitle, rating, userRated, price, oldPrice, offer, description, location;
-    private List<String> productImages;
+    private List<String> productImages, specs;
 
     public ProductsModel() {
     }
@@ -106,4 +106,13 @@ public class ProductsModel implements Serializable {
     public void setLocation(String location) {
         this.location = location;
     }
+
+    public List<String> getSpecs() {
+        return specs;
+    }
+
+    public void setSpecs(List<String> specs) {
+        this.specs = specs;
+    }
+
 }
