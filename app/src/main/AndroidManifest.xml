@@ -24,6 +24,9 @@
         android:theme="@style/Theme.ECommerce"
         tools:targetApi="31">
         <activity
+            android:name=".view.activities.AddressesActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.activities.ProductDetailActivity"
             android:exported="false" />
         <activity
