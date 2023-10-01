@@ -14,16 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.ecommerce.R;
 import com.example.ecommerce.listeners.OnItemClickListener;
-import com.example.ecommerce.models.HomeItemsModel;
+import com.example.ecommerce.models.CategoryModel;
 
 import java.util.ArrayList;
 
-public class HomeItemAdapter extends RecyclerView.Adapter<HomeItemAdapter.ViewHolder> {
+public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.ViewHolder> {
     Context context;
-    ArrayList<HomeItemsModel> dataSet;
+    ArrayList<CategoryModel> dataSet;
     OnItemClickListener onItemClickListener;
 
-    public HomeItemAdapter(Context context, ArrayList<HomeItemsModel> dataSet, OnItemClickListener onItemClickListener) {
+    public CategoryListAdapter(Context context, ArrayList<CategoryModel> dataSet, OnItemClickListener onItemClickListener) {
         this.context = context;
         this.dataSet = dataSet;
         this.onItemClickListener = onItemClickListener;
@@ -37,7 +37,7 @@ public class HomeItemAdapter extends RecyclerView.Adapter<HomeItemAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HomeItemAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CategoryListAdapter.ViewHolder holder, int position) {
         holder.tvCategoryName.setText(dataSet.get(position).getCategoryTitle());
         holder.tvCategorySpecial.setText(dataSet.get(position).getCategorySpecial());
         Glide.with(context)
@@ -45,12 +45,7 @@ public class HomeItemAdapter extends RecyclerView.Adapter<HomeItemAdapter.ViewHo
                 .placeholder(R.drawable.placeholder)
                 .into(holder.categoryImage);
 
-        holder.cvCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemClickListener.onItemClick(holder.getAdapterPosition());
-            }
-        });
+        holder.cvCategory.setOnClickListener(v -> onItemClickListener.onItemClick(holder.getAdapterPosition()));
 
     }
 

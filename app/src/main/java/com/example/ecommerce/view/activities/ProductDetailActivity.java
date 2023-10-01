@@ -1,27 +1,24 @@
 package com.example.ecommerce.view.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.ecommerce.R;
 import com.example.ecommerce.adapter.ProductSpecsAdapter;
-import com.example.ecommerce.contract.ProductContractImpl;
 import com.example.ecommerce.contract.ProductSpecsContract;
 import com.example.ecommerce.contract.ProductSpecsContractImpl;
 import com.example.ecommerce.models.ProductSpecsModel;
 import com.example.ecommerce.models.ProductsModel;
-import com.example.ecommerce.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,19 +59,31 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductS
             tvUserRated.setText(selectedProduct.getUserRated());
             tvProductPrice.setText(selectedProduct.getPrice());
             tvProductOldPrice.setText(selectedProduct.getOldPrice());
-            btnProductRating.setText(selectedProduct.getRating());
+            if (selectedProduct.getRating() != null) {
+                btnProductRating.setText(selectedProduct.getRating());
+                btnProductRating.setVisibility(View.VISIBLE);
+            } else {
+                btnProductRating.setVisibility(View.GONE);
+            }
             tvDescription.setText(selectedProduct.getDescription());
             tvLocation.setText(selectedProduct.getLocation());
 
             ArrayList<SlideModel> imageList = new ArrayList<>();
-            imageList.add(new SlideModel(selectedProduct.getProductImageUrl(), ScaleTypes.FIT));
+            if (selectedProduct.getProductImageUrl() != null) {
+                imageList.add(new SlideModel(selectedProduct.getProductImageUrl(), ScaleTypes.FIT));
+            }
             if (selectedProduct.getProductImages() != null) {
                 for (String imageUrl : selectedProduct.getProductImages()) {
                     imageList.add(new SlideModel(imageUrl, ScaleTypes.FIT));
                 }
             }
 
-            imageSlider.setImageList(imageList);
+            if (imageList.size() > 0) {
+                imageSlider.setImageList(imageList);
+                imageSlider.setVisibility(View.VISIBLE);
+            } else {
+                imageSlider.setVisibility(View.GONE);
+            }
 
             if (selectedProduct.getSpecs() != null) {
                 String documentId = selectedProduct.getSpecs().get(0);
@@ -84,7 +93,7 @@ public class ProductDetailActivity extends AppCompatActivity implements ProductS
             }
 
         }
-        ivBack.setOnClickListener(v -> Utils.navigateScreen(ProductDetailActivity.this, CategoryProductsActivity.class));
+        ivBack.setOnClickListener(v -> onBackPressed());
     }
 
     @Override

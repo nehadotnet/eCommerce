@@ -15,11 +15,12 @@ import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.ecommerce.R;
-import com.example.ecommerce.adapter.HomeItemAdapter;
+import com.example.ecommerce.adapter.CategoryListAdapter;
 import com.example.ecommerce.contract.HomeContract;
 import com.example.ecommerce.contract.HomeContractImpl;
 import com.example.ecommerce.listeners.OnItemClickListener;
-import com.example.ecommerce.models.HomeItemsModel;
+import com.example.ecommerce.models.CategoryModel;
+import com.example.ecommerce.utils.Constants;
 import com.example.ecommerce.utils.Utils;
 import com.example.ecommerce.view.activities.CategoryProductsActivity;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -30,8 +31,8 @@ public class HomeFragment extends Fragment implements HomeContract.View, OnItemC
     ImageSlider imageSlider;
     RecyclerView rvCategories;
     CircularProgressIndicator progressBar;
-    ArrayList<HomeItemsModel> homeItemsModelArrayList = new ArrayList<>();
-    HomeItemAdapter homeItemAdapter;
+    ArrayList<CategoryModel> categoryModelArrayList = new ArrayList<>();
+    CategoryListAdapter categoryListAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,8 +50,7 @@ public class HomeFragment extends Fragment implements HomeContract.View, OnItemC
 
         setImageSlider();
         HomeContractImpl homeContract = new HomeContractImpl(this);
-        homeContract.loadItems();
-
+        homeContract.loadItems(Constants.CATEGORIES_COL);
     }
 
     private void setImageSlider() {
@@ -63,16 +63,16 @@ public class HomeFragment extends Fragment implements HomeContract.View, OnItemC
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
-    public void displayItems(ArrayList<HomeItemsModel> homeItemsModelArrayList) {
-        this.homeItemsModelArrayList.clear();
-        if (homeItemsModelArrayList != null) {
-            this.homeItemsModelArrayList.addAll(homeItemsModelArrayList);
-        }
-        if (homeItemAdapter == null) {
-            homeItemAdapter = new HomeItemAdapter(getContext(), homeItemsModelArrayList, this);
-            rvCategories.setAdapter(homeItemAdapter);
-        } else {
-            homeItemAdapter.notifyDataSetChanged();
+    public void displayItems(ArrayList<CategoryModel> categoryModelArrayList) {
+        this.categoryModelArrayList.clear();
+        if (categoryModelArrayList.size() > 0) {
+            this.categoryModelArrayList.addAll(categoryModelArrayList);
+            if (categoryListAdapter == null) {
+                categoryListAdapter = new CategoryListAdapter(getContext(), categoryModelArrayList, this);
+                rvCategories.setAdapter(categoryListAdapter);
+            } else {
+                categoryListAdapter.notifyDataSetChanged();
+            }
         }
     }
 
@@ -89,8 +89,7 @@ public class HomeFragment extends Fragment implements HomeContract.View, OnItemC
     @Override
     public void onItemClick(int position) {
         if (position >= 0) {
-            String categoryName = homeItemsModelArrayList.get(position).getCategoryTitle();
-            int categoryId = homeItemsModelArrayList.get(position).getCategoryId();
+            String categoryName = categoryModelArrayList.get(position).getCategoryTitle();
             Intent intent = new Intent(getContext(), CategoryProductsActivity.class);
             intent.putExtra("categoryName", categoryName);
             startActivity(intent);

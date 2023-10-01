@@ -38,16 +38,24 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_rounded"
         app:iconifiedByDefault="false"
-        app:queryHint="Search here..."
-        />
+        app:queryHint="Search here..." />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_products"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
         tools:listitem="@layout/rv_products" />
+    <TextView
+        android:id="@+id/tv_no_product_found"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="visible"
+        android:text="@string/no_product_found"
+        android:textAlignment="center" />
 
     <RelativeLayout
         android:layout_width="match_parent"

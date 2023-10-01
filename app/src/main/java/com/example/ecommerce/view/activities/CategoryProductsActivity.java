@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 public class CategoryProductsActivity extends AppCompatActivity implements ProductContract.View, OnProductItemClickListner {
 
-    TextView tvCategoryName;
+    TextView tvCategoryName, tvNoProductFound;
     SearchView searchView;
     CircularProgressIndicator progressbar;
     RecyclerView rvProducts;
@@ -43,6 +43,7 @@ public class CategoryProductsActivity extends AppCompatActivity implements Produ
         setContentView(R.layout.activity_category_products);
 
         tvCategoryName = findViewById(R.id.tv_category_name);
+        tvNoProductFound = findViewById(R.id.tv_no_product_found);
         searchView = findViewById(R.id.searchView);
         progressbar = findViewById(R.id.progress_bar);
         rvProducts = findViewById(R.id.rv_products);
@@ -88,16 +89,20 @@ public class CategoryProductsActivity extends AppCompatActivity implements Produ
     @Override
     public void displayProducts(ArrayList<ProductsModel> productsModelArrayList) {
         this.productsModelArrayList.clear();
-        if (productsModelArrayList != null) {
+        if (productsModelArrayList.size() > 0) {
             this.productsModelArrayList.addAll(productsModelArrayList);
-        }
-        if (categoryProductsAdapter == null) {
-            categoryProductsAdapter = new CategoryProductsAdapter(this, this.productsModelArrayList, this);
-            rvProducts.setAdapter(categoryProductsAdapter);
+            if (categoryProductsAdapter == null) {
+                categoryProductsAdapter = new CategoryProductsAdapter(this, this.productsModelArrayList, this);
+                rvProducts.setAdapter(categoryProductsAdapter);
+            } else {
+                categoryProductsAdapter.notifyDataSetChanged();
+            }
+            rvProducts.setVisibility(View.VISIBLE);
+            tvNoProductFound.setVisibility(View.GONE);
         } else {
-            categoryProductsAdapter.notifyDataSetChanged();
+            rvProducts.setVisibility(View.GONE);
+            tvNoProductFound.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override

@@ -4,8 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.ecommerce.models.AccountItemsModel;
-import com.example.ecommerce.models.HomeItemsModel;
+import com.example.ecommerce.models.CategoryModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,10 +23,10 @@ public class HomeContractImpl implements HomeContract.Presenter {
     }
 
     @Override
-    public void loadItems() {
+    public void loadItems(String categories) {
         view.showProgress();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("categories")
+        db.collection(categories)
                 .orderBy("categoryTitle", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -35,13 +34,13 @@ public class HomeContractImpl implements HomeContract.Presenter {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             view.hideProgress();
-                            ArrayList<HomeItemsModel> homeItemsModelArrayList = new ArrayList<>();
+                            ArrayList<CategoryModel> categoryModelArrayList = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.e("TAG", document.getId() + " => " + document.getData());
-                                HomeItemsModel homeItemsModel = document.toObject(HomeItemsModel.class);
-                                homeItemsModelArrayList.add(homeItemsModel);
+                                CategoryModel categoryModel = document.toObject(CategoryModel.class);
+                                categoryModelArrayList.add(categoryModel);
                             }
-                            view.displayItems(homeItemsModelArrayList);
+                            view.displayItems(categoryModelArrayList);
                         } else {
                             Log.e("TAG", "Error getting documents: ", task.getException());
                         }

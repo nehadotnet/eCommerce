@@ -1,16 +1,16 @@
 package com.example.ecommerce.contract;
 
-import com.example.ecommerce.models.HomeItemsModel;
+import com.example.ecommerce.models.CategoryModel;
 
 import java.util.ArrayList;
 
 public interface HomeContract {
     interface Presenter {
-        void loadItems();
+        void loadItems(String categories);
     }
 
     interface View {
-        void displayItems(ArrayList<HomeItemsModel> homeItemsModelArrayList);
+        void displayItems(ArrayList<CategoryModel> categoryModelArrayList);
 
         void showProgress();
 

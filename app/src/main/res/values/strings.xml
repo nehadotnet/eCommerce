@@ -50,4 +50,7 @@
     <string name="strike_25000_strike"><strike> ₹25000 </strike></string>
     <string name="open_bracket">(</string>
     <string name="close_bracket">)</string>
+    <string name="no_product_found">No Product Found!</string>
+    <string name="explore_categories">Explore Categories</string>
+    <string name="best_deals">Best Deals</string>
 </resources>
