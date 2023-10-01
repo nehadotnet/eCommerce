@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 
 import com.example.ecommerce.models.ProductsModel;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -44,6 +46,28 @@ public class ProductContractImpl implements ProductContract.Presenter {
                         } else {
                             Log.e("TAG", "Error getting documents: ", task.getException());
                         }
+                    }
+                });
+
+    }
+
+    @Override
+    public void addProductToWishList(String collection, String productDocumentId, boolean heartType) {
+        view.showProgress();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(collection.toLowerCase()).document(productDocumentId)
+                .update("heartType", !heartType)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        view.hideProgress();
+                        view.onHeartTypeChecked(false);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        view.onHeartTypeChecked(false);
                     }
                 });
 

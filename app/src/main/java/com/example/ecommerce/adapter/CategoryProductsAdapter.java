@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,25 +14,23 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.ecommerce.OnProductItemClickListner;
 import com.example.ecommerce.R;
-import com.example.ecommerce.listeners.OnItemClickListener;
-import com.example.ecommerce.models.HomeItemsModel;
 import com.example.ecommerce.models.ProductsModel;
-import com.example.ecommerce.view.activities.CategoryProductsActivity;
 
 import java.util.ArrayList;
 
 public class CategoryProductsAdapter extends RecyclerView.Adapter<CategoryProductsAdapter.ViewHolder> {
     Context context;
     ArrayList<ProductsModel> dataSet;
-    OnItemClickListener onItemClickListener;
+    OnProductItemClickListner onProductItemClickListner;
     ArrayList<ProductsModel> originalData;
 
-    public CategoryProductsAdapter(Context context, ArrayList<ProductsModel> dataSet, OnItemClickListener onItemClickListener) {
+    public CategoryProductsAdapter(Context context, ArrayList<ProductsModel> dataSet, OnProductItemClickListner onProductItemClickListner) {
         this.context = context;
         this.dataSet = dataSet;
         this.originalData = new ArrayList<>(dataSet);
-        this.onItemClickListener = onItemClickListener;
+        this.onProductItemClickListner = onProductItemClickListner;
     }
 
     @NonNull
@@ -53,15 +52,25 @@ public class CategoryProductsAdapter extends RecyclerView.Adapter<CategoryProduc
                 .load(dataSet.get(position).getProductImageUrl())
                 .placeholder(R.drawable.placeholder)
                 .into(holder.ivProduct);
+        if (dataSet.get(position).isHeartType()) {
+            holder.ibWishList.setImageDrawable(context.getDrawable(R.drawable.baseline_favorite));
+        } else {
+            holder.ibWishList.setImageDrawable(context.getDrawable(R.drawable.baseline_favorite_border));
+        }
 
-        holder.cvProduct.setOnClickListener(new View.OnClickListener() {
+        holder.tvProductName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClickListener.onItemClick(holder.getAdapterPosition());
+                onProductItemClickListner.onItemClick(holder.getAdapterPosition(), "tv_product_name");
             }
         });
 
-
+        holder.ibWishList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onProductItemClickListner.onItemClick(holder.getAdapterPosition(), "ib_wish_list");
+            }
+        });
     }
 
     @Override
@@ -91,6 +100,7 @@ public class CategoryProductsAdapter extends RecyclerView.Adapter<CategoryProduc
         CardView cvProduct;
         ImageView ivProduct;
         AppCompatButton btnProductRating;
+        ImageButton ibWishList;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -102,6 +112,7 @@ public class CategoryProductsAdapter extends RecyclerView.Adapter<CategoryProduc
             tvUserRated = itemView.findViewById(R.id.tv_product_user_rated);
             tvProductOldPrice = itemView.findViewById(R.id.tv_product_old_price);
             tvProductOffer = itemView.findViewById(R.id.tv_product_price_off);
+            ibWishList = itemView.findViewById(R.id.ib_wish_list);
         }
     }
 }

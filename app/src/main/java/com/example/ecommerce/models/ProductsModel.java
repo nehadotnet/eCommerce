@@ -5,8 +5,11 @@ import java.util.List;
 
 public class ProductsModel implements Serializable {
     private int productId;
-    private String productTitle, productImageUrl, categoryTitle, rating, userRated, price, oldPrice, offer, description, location;
+    private String productTitle, productImageUrl, categoryTitle, rating, userRated,
+            price, oldPrice, offer, description, location, productDocumentId;
     private List<String> productImages, specs;
+
+    private boolean heartType = false;
 
     public ProductsModel() {
     }
@@ -107,12 +110,29 @@ public class ProductsModel implements Serializable {
         this.location = location;
     }
 
+    public boolean isHeartType() {
+        return heartType;
+    }
+
+    public void setHeartType(boolean heartType) {
+        this.heartType = heartType;
+    }
+
+
     public List<String> getSpecs() {
         return specs;
     }
 
     public void setSpecs(List<String> specs) {
         this.specs = specs;
+    }
+
+    public String getProductDocumentId() {
+        return productDocumentId;
+    }
+
+    public void setProductDocumentId(String productDocumentId) {
+        this.productDocumentId = productDocumentId;
     }
 
 }

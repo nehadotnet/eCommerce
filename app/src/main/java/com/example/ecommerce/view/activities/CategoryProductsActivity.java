@@ -2,39 +2,28 @@ package com.example.ecommerce.view.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.ecommerce.OnProductItemClickListner;
 import com.example.ecommerce.R;
 import com.example.ecommerce.adapter.CategoryProductsAdapter;
-import com.example.ecommerce.adapter.HomeItemAdapter;
-import com.example.ecommerce.contract.EditProfileContractImpl;
-import com.example.ecommerce.contract.HomeContractImpl;
 import com.example.ecommerce.contract.ProductContract;
 import com.example.ecommerce.contract.ProductContractImpl;
-import com.example.ecommerce.listeners.OnItemClickListener;
-import com.example.ecommerce.models.HomeItemsModel;
 import com.example.ecommerce.models.ProductsModel;
-import com.example.ecommerce.utils.Constants;
 import com.example.ecommerce.utils.Utils;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import java.util.ArrayList;
 
-public class CategoryProductsActivity extends AppCompatActivity implements ProductContract.View, OnItemClickListener {
+public class CategoryProductsActivity extends AppCompatActivity implements ProductContract.View, OnProductItemClickListner {
 
     TextView tvCategoryName;
     SearchView searchView;
@@ -45,7 +34,9 @@ public class CategoryProductsActivity extends AppCompatActivity implements Produ
     CategoryProductsAdapter categoryProductsAdapter;
     SharedPreferences sharedPreferences;
     ProductContractImpl productContract;
+    String categoryName;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,11 +48,12 @@ public class CategoryProductsActivity extends AppCompatActivity implements Produ
         rvProducts = findViewById(R.id.rv_products);
         ivBackArrow = findViewById(R.id.iv_back_arrow);
 
-        String categoryName = getIntent().getStringExtra("categoryName");
+        categoryName = getIntent().getStringExtra("categoryName");
         tvCategoryName.setText(categoryName);
 
-        ProductContractImpl productContract = new ProductContractImpl(this);
+        productContract = new ProductContractImpl(this);
         productContract.loadProducts(categoryName);
+
 
         ivBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,8 +81,10 @@ public class CategoryProductsActivity extends AppCompatActivity implements Produ
             }
         });
 
+
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void displayProducts(ArrayList<ProductsModel> productsModelArrayList) {
         this.productsModelArrayList.clear();
@@ -98,7 +92,7 @@ public class CategoryProductsActivity extends AppCompatActivity implements Produ
             this.productsModelArrayList.addAll(productsModelArrayList);
         }
         if (categoryProductsAdapter == null) {
-            categoryProductsAdapter = new CategoryProductsAdapter(this, productsModelArrayList, this);
+            categoryProductsAdapter = new CategoryProductsAdapter(this, this.productsModelArrayList, this);
             rvProducts.setAdapter(categoryProductsAdapter);
         } else {
             categoryProductsAdapter.notifyDataSetChanged();
@@ -116,13 +110,24 @@ public class CategoryProductsActivity extends AppCompatActivity implements Produ
         Utils.hideLoadingIndicator(progressbar);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
-    public void onItemClick(int position) {
-        if (position >= 0 && position < productsModelArrayList.size()) {
-            ProductsModel selectedProduct = productsModelArrayList.get(position);
-            Intent intent = new Intent(CategoryProductsActivity.this, ProductDetailActivity.class);
-            intent.putExtra("selectedProduct", selectedProduct);
-            startActivity(intent);
+    public void onHeartTypeChecked(Boolean heartType) {
+        productContract.loadProducts(categoryName);
+    }
+
+    @Override
+    public void onItemClick(int position, String btnType) {
+        if (btnType.equals("tv_product_name")) {
+            if (position >= 0 && position < productsModelArrayList.size()) {
+                ProductsModel selectedProduct = productsModelArrayList.get(position);
+                Intent intent = new Intent(CategoryProductsActivity.this, ProductDetailActivity.class);
+                intent.putExtra("selectedProduct", selectedProduct);
+                startActivity(intent);
+            }
+        } else if (btnType.equals("ib_wish_list")) {
+            productContract.addProductToWishList(categoryName, productsModelArrayList.get(position).getProductDocumentId(),
+                    productsModelArrayList.get(position).isHeartType());
         }
     }
 }

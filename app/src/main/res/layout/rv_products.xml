@@ -117,6 +117,7 @@
         </LinearLayout>
 
         <ImageButton
+            android:id="@+id/ib_wish_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
