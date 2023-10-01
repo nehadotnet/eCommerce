@@ -9,16 +9,21 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProductContractImpl implements ProductContract.Presenter {
 
     ProductContract.View view;
+
 
     public ProductContractImpl(ProductContract.View view) {
         this.view = view;
@@ -68,6 +73,27 @@ public class ProductContractImpl implements ProductContract.Presenter {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         view.onHeartTypeChecked(false);
+                    }
+                });
+        //Add to wishlist functionality
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = firebaseUser.getUid();
+        ArrayList<String> items = new ArrayList<>();
+        items.add(collection + "/" + productDocumentId);
+        HashMap<String, ArrayList<String>> map = new HashMap<>();
+        map.put("items", items);
+        db.collection("wishLists").document(userId)
+                .set(map)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.e("TAG", "onSuccess: ");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("TAG", "onFailure: " + e.getMessage());
                     }
                 });
 
